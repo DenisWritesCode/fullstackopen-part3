@@ -63,10 +63,17 @@ const generateRandomUserID = () => Math.floor(Math.random() * 1000);
 app.post("/api/persons", (request, response) => {
   const newUser = request.body;
 
-  if (!newUser.name) {
+  if (!newUser.name || !newUser.number) {
     return response.status(400).json({
-      error: "kindly provide a user name",
+      error: "kindly provide a user name and number",
     });
+  }
+
+  const user = phoneBookUsers.find(person => person.name === newUser.name);
+  if(user) {
+    return response.status(400).json({
+        error: "user name already exists",
+      });
   }
 
   const person = {
