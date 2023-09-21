@@ -58,6 +58,28 @@ app.delete("/api/persons/:id", (request, response) => {
   response.status(204).end();
 });
 
+// Add new user
+const generateRandomUserID = () => Math.floor(Math.random() * 1000);
+app.post("/api/persons", (request, response) => {
+  const newUser = request.body;
+
+  if (!newUser.name) {
+    return response.status(400).json({
+      error: "kindly provide a user name",
+    });
+  }
+
+  const person = {
+    id: generateRandomUserID(),
+    name: newUser.name,
+    number: newUser.number
+  }
+
+  phoneBookUsers = phoneBookUsers.concat(person);
+  
+  response.json(person);
+});
+
 const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
