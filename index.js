@@ -36,7 +36,19 @@ app.get('/info', (request, response) => {
     const timeOfReceivingRequest = new Date();
     const responseString = `<p>Phonebook has info for ${phoneBookUsers.length} people.<p>${timeOfReceivingRequest}</p>`
     response.send(responseString);
-})
+});
+
+// Fetch single user
+app.get("/api/persons/:id", (request, response) => {
+    const userID = Number(request.params.id);
+    const user = phoneBookUsers.find(person => person.id === userID);
+
+    if(user) {
+        response.json(user);
+    } else {
+        response.status(404).end();
+    }
+});
 
 const PORT = 3001;
 app.listen(PORT, () => {
