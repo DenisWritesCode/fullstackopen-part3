@@ -69,6 +69,20 @@ app.delete("/api/persons/:id", (request, response) => {
   response.status(204).end();
 });
 
+// Update existing user
+app.put("/api/persons/:id", (request, response) => {
+  const userID = Number(request.params.id);
+  phoneBookUsers = phoneBookUsers.map((person) => {
+    if ( person.id === userID) {
+      person.number = request.body.number;
+      response.json(person);
+    }
+
+    return person;
+  });
+
+});
+
 // Add new user
 const generateRandomUserID = () => Math.floor(Math.random() * 1000);
 app.post("/api/persons", (request, response) => {
