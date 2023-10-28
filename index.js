@@ -1,4 +1,7 @@
 const express = require("express");
+const morgan = require("morgan");
+const cors = require("cors");
+
 const app = express();
 
 let phoneBookUsers = [
@@ -24,7 +27,15 @@ let phoneBookUsers = [
   },
 ];
 
+app.use(cors());
+app.use(express.static('dist')); // Ask express to use the 'dist' folder
 app.use(express.json());
+morgan.token("user", function (request, response) {
+  // console.log(response);
+  // return JSON.stringify(`${request.method} ${request.route.path} ${response.statusCode}`);
+});
+
+app.use(morgan(":user"));
 
 // Fetch all users
 app.get("/api/persons", (request, response) => {
@@ -87,7 +98,7 @@ app.post("/api/persons", (request, response) => {
   response.json(person);
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
